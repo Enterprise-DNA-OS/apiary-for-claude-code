@@ -1,115 +1,109 @@
-<h1 align="center">Apiary for Claude Code</h1>
+# Apiary for Claude Code
 
-<p align="center">
-  <strong>The open-source beekeeping and apiary records system that is just a database and Claude Code.</strong>
-</p>
+Sites, hive counts, inspections, treatment follow-ups, honey harvests and extraction batches in a database you own. Built by Enterprise DNA. MIT licence. Works with Claude Code, Codex, OpenCode or Cursor.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+| Do it yourself | We customise it | We run it for you |
+|---|---|---|
+| Install the free base and keep your records. | Your fields, rules, MyApiary mapping, screens and preferred stack. | Installed and operated through Omni by Enterprise DNA. One setup fee, then a retainer. |
+| [Quick start](#quick-start) | [Discuss your version](https://enterprisedna.co/omni/book?offer=replace-software&utm_campaign=myapiary&utm_medium=readme-custom) | [Book a call](https://enterprisedna.co/omni/book?offer=replace-software&utm_campaign=myapiary&utm_medium=readme-managed) |
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your MyApiary data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=myapiary">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/myapiary?utm_source=github&utm_medium=readme&utm_campaign=myapiary">How it works</a></td>
-  </tr>
-</table>
+## Scope
 
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-myapiary">Instead of MyApiary</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
+MyApiary’s US pricing lists Sideliner at US$699 annually, Commercial at US$999 per user annually and Professional at US$1,399 per user annually, excluding taxes. Extraction is a separate product. This is an ownership and customisation option, not proof of a five-figure annual saving. [Vendor pricing](https://www.myapiary.com/pricing/), checked 2026-10-05.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
-
----
-
-## What is this
-
-Apiary for Claude Code does the job you pay MyApiary for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the MyApiary dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays MyApiary per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=myapiary).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
+The base handles office records and review routines. It does not replace field tablets, mapping, offline sync, barcode readers, extraction equipment, HiveHub or official harvest declarations. Ten questions below demonstrate shipped reports; MyApiary also provides reporting and CSV exports for custom analysis, so they are not claims of exclusive capability.
 
 ## Quick start
 
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
+Node 20 or newer:
 
 ```bash
 git clone https://github.com/Enterprise-DNA-OS/apiary-for-claude-code.git
 cd apiary-for-claude-code
 npm install
+npm test
 npm run demo
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+Demo uses fictional records in .data/demo and refuses DATABASE_URL. Set DATA_DIR=.data/demo to query that demo. For work, leave DATA_DIR unset and run npm run migrate to create an empty local PGlite database. DATABASE_URL selects PostgreSQL. Keep one process at a time on PGlite. Set business_name, colours and logo_path in brand.json before rendering documents.
 
-### Use it with your own Postgres or Supabase
+```bash
+node scripts/apiary.mjs help
+node scripts/apiary.mjs import myapiary --landowners=examples/myapiary/landowners.csv --sites=examples/myapiary/sites.csv --statuses=examples/myapiary/statuses.csv --dry-run
+node scripts/apiary.mjs add sites --code=YOUR-SITE --name="Your site"
+node scripts/apiary.mjs visit-round --json
+```
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+## Recurring commands
 
-## The commands
-
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
-
-| Command | What it does |
+| Command | Job |
 |---|---|
-| `/...` | ... |
+| /sites | List sites, latest counts and observation dates. |
+| /landowners | Review landowner contact and billing records. |
+| /visit-round | Plan this week’s site visits from recorded visit intervals. |
+| /attention | Find stale observations, late jobs and treatment follow-ups. |
+| /job-board | Review due jobs and the assigned team. |
+| /disease-watch | Review disease observations and notification evidence. |
+| /treatment-watch | Review removal dates and operator-supplied clearance instructions. |
+| /harvest-ready | Check missing evidence before planning harvest. This is not clearance to harvest or sell. |
+| /harvest-trace | Reconcile harvest quantities, allocations and declaration evidence. |
+| /site-performance | Compare recorded harvest kilograms and costs, with overdue work. |
+| /consumables | Review feed and other consumables by site. |
+| /stock-review | Review latest hive numbers, losses, strength and queen notes. |
+| /agreements-due | Review site access agreements ending within 60 days. |
+| /filings-due | Review official return and certificate receipts. |
+| /compliance | Review NZ evidence checks with cited sources. Read docs/compliance.md first. |
+| /site | Read the full site history before writing about it. |
+| /batch | Trace a batch back to its harvests and apiaries. |
+| /add | Read help for the entity fields. Read matching records before adding. Require the operator’s facts and a unique stable code. |
+| /set | Read the record first. Update only the fields the operator supplied. NULL clears an optional field. Codes stay stable. |
+| /log | Read the site first and record the operator note verbatim. |
+| /weekly-review | Read visit-round, job-board and compliance. Write a Monday plan with owners, due dates and unresolved evidence. |
+| /draft-landowner | Read the site history and access agreement. Draft the site update into drafts/. A person reviews and sends. |
+| /import | Read docs/replace-myapiary.md. Check source headers and retain originals. Run dry-run, reconcile counts, then repeat without dry-run when the operator asked for the import. |
+| /export | Export all business records. This snapshot is not a tested database restore. Keep and test normal database backups too. |
+| /documents | Read the records and docs/compliance.md. Render private preparation documents, then review them before use. Never call them official filings. |
+| /new-view | Read views.json. Add a read-only query using existing views. Keep money units and dates explicit, run npm test, then render. No server or editing interface. |
+| /customise | Clarify the requested field or rule. Inspect existing migrations and reports. Write a new numbered SQL migration, apply it, update entity metadata, imports and commands, run npm test and show the result. Do not rewrite applied migrations or invent legal rules. |
 
-## Instead of myapiary
+## Ten questions to ask of your records
 
-<!-- TODO(author): how to bring data across from MyApiary; link docs/replace-myapiary.md -->
+1. Which sites have missed their visit interval? (`visit-round`)
+2. Which teams have overdue site jobs? (`job-board`)
+3. Which treatments still need removal? (`treatment-watch`)
+4. Which harvests lack declaration and tutin evidence? (`harvest-trace`)
+5. Which sites have both overdue jobs and harvest evidence gaps? (`site-performance`)
+6. Which suspected disease findings lack notification evidence? (`disease-watch`)
+7. Which access agreements need renewal within 60 days? (`agreements-due`)
+8. Which sites have stale hive counts or queen notes? (`stock-review`)
+9. Which harvests supplied one extraction batch? (`batch B-SPRING`)
+10. Which official returns still lack receipt references? (`filings-due`)
 
-## Architecture
+## Your first hour: ten things to ask for
 
-```
-apiary-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
-```
+1. Show stale site visits.
+2. Find this week’s unfinished jobcards.
+3. Check treatment removals.
+4. List missing harvest evidence.
+5. Trace the demo extraction batch.
+6. Draft a landowner update.
+7. Show site access renewals.
+8. Add a gate code field with /customise.
+9. Change the business name and colours.
+10. Add a private regional view with /new-view.
 
-## Built for coding agents
+## Records, documents and imports
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+Every entity has a UUID, stable code and creation/update timestamps. Dates are YYYY-MM-DD. Reads default to aligned text; --json returns machine-readable results. Interactive lookups accept names, codes or partial IDs, reject ambiguity and exit 1 with candidates. Add and set use only documented fields. NULL clears optional fields. No delete command exists.
 
-## Contributing
+`npm run docs` creates harvest declaration preparation packs, batch trace records, site records and filing checklists. `npm run view` creates private week and harvest snapshots. These are read-only HTML files with no server. Neither documents nor record checks approve honey for sale or submit to authorities.
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+[Switching guide](docs/replace-myapiary.md) covers the documented MyApiary CSV exports, explicit header mapping and a transactional dry run. Latest site status is not complete history. Unsupported export columns fail clearly. [Compliance checks](docs/compliance.md) cite NZ sources and state their limits. [Why no front end](docs/why-no-front-end.md) covers field work and production controls.
 
-## Want it installed and run for you?
+`node scripts/apiary.mjs export --out=exports/apiary.json` includes all business entities. It is a portable snapshot, not a tested restore command. Establish database backups and test recovery before real use. The base has no login, permissions or immutable audit trail.
 
-Enterprise DNA installs Apiary for Claude Code for your business, migrates your MyApiary data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+## Verification
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=myapiary)
-- Read more: [enterprisedna.co/omni/instead-of/myapiary](https://enterprisedna.co/omni/instead-of/myapiary?utm_source=github&utm_medium=readme&utm_campaign=myapiary)
+npm test creates temporary storage, migrates, seeds twice, exercises every command, verifies imports and rollback, validates dates and names, checks batch allocations and renders private documents. CI covers Windows and Linux with PGlite and Linux with PostgreSQL. A local Linux PASS does not establish the other environments until their jobs pass.
 
-## License
-
-MIT. Copyright (c) 2026 Enterprise DNA.
+MyApiary belongs to its owner. This independent project is not affiliated with MyApiary, MPI or the AFB Management Agency.

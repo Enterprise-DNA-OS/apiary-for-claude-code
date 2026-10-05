@@ -1,11 +1,66 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "harvest-pack",
+    "title": "Harvest declaration preparation pack",
+    "for_each": "select id,code from harvests order by code",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Source records",
+        "sql": "select * from harvest_trace where id=$1",
+        "note": "Preparation only. Complete and sign the current MPI form for each delivery. This is not a harvest declaration, food safety clearance or export certificate."
+      },
+      {
+        "title": "Treatment history to review",
+        "sql": "select product,applied_on,instructions,removal_due,removed_on,harvest_clear_on from treatments where site_id=(select site_id from harvests where id=$1) order by applied_on",
+        "note": "Includes all recorded treatment history, including entries after harvest. Review the dates and original instructions."
+      }
+    ]
+  },
+  {
+    "name": "batch-trace",
+    "title": "Extraction batch record",
+    "for_each": "select id,code from batches order by code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Harvest inputs",
+        "sql": "select h.code,s.name as site,s.registration,h.harvested_on,i.kg,h.declaration_ref,h.evidence_ref from batch_inputs i join harvests h on h.id=i.harvest_id join sites s on s.id=h.site_id where i.batch_id=$1",
+        "note": "Input weights, not final drum weight. Reconcile extraction losses and processor records separately."
+      }
+    ]
+  },
+  {
+    "name": "site-record",
+    "title": "Apiary site record",
+    "for_each": "select id,code from sites order by code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Site details",
+        "sql": "select * from site_status where id=$1"
+      },
+      {
+        "title": "Inspection history",
+        "sql": "select inspected_on,inspector,hives_checked,afb,notified_on,notification_ref,action_notes from inspections where site_id=$1 order by inspected_on"
+      },
+      {
+        "title": "Access agreements",
+        "sql": "select name,starts_on,ends_on,terms from agreements where site_id=$1"
+      }
+    ]
+  },
+  {
+    "name": "filing-checklist",
+    "title": "Official filing preparation checklist",
+    "for_each": "select id,code from filings order by code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Filing evidence",
+        "sql": "select name,kind,due_on,submitted_on,receipt_ref,notes from filings where id=$1",
+        "note": "Local dates and receipts are operator records. Submit through HiveHub or the Management Agency. No filing is sent from here."
+      }
     ]
   }
 ]

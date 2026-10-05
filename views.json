@@ -1,13 +1,35 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Apiary for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Apiary week",
+    "subtitle": "Read-only snapshot. Review dates before using it.",
     "sections": [
       {
-        "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "title": "Visit round",
+        "sql": "select * from visit_round"
+      },
+      {
+        "title": "Jobs",
+        "sql": "select code,name,due_on,assigned_to,completed_on from jobs order by due_on"
+      },
+      {
+        "title": "Record checks",
+        "sql": "select * from compliance_findings"
+      }
+    ]
+  },
+  {
+    "name": "harvest",
+    "title": "Harvest traceability",
+    "sections": [
+      {
+        "title": "Harvest evidence",
+        "sql": "select * from harvest_trace"
+      },
+      {
+        "title": "Site performance",
+        "sql": "select * from site_performance",
+        "note": "Recorded totals across all history. Costs exclude unrecorded work. No sales margin is calculated."
       }
     ]
   }

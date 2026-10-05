@@ -1,0 +1,42 @@
+[
+  [
+    "Which sites have missed their visit interval?",
+    "visit-round"
+  ],
+  [
+    "Which teams have overdue site jobs?",
+    "job-board"
+  ],
+  [
+    "Which treatments still need removal?",
+    "treatment-watch"
+  ],
+  [
+    "Which harvests lack declaration and tutin evidence?",
+    "harvest-trace"
+  ],
+  [
+    "Which sites have both overdue jobs and harvest evidence gaps?",
+    "site-performance"
+  ],
+  [
+    "Which suspected disease findings lack notification evidence?",
+    "disease-watch"
+  ],
+  [
+    "Which access agreements need renewal within 60 days?",
+    "agreements-due"
+  ],
+  [
+    "Which sites have stale hive counts or queen notes?",
+    "stock-review"
+  ],
+  [
+    "Which harvests supplied one extraction batch?",
+    "batch B-SPRING"
+  ],
+  [
+    "Which official returns still lack receipt references?",
+    "filings-due"
+  ]
+]

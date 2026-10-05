@@ -1,0 +1,412 @@
+{
+  "landowners": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "name": {
+      "type": "text",
+      "required": true
+    },
+    "contact": {
+      "type": "text",
+      "required": false
+    },
+    "billing_address": {
+      "type": "text",
+      "required": false
+    }
+  },
+  "sites": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "name": {
+      "type": "text",
+      "required": true
+    },
+    "landowner_id": {
+      "type": "uuid",
+      "required": false
+    },
+    "site_group": {
+      "type": "text",
+      "required": false
+    },
+    "site_type": {
+      "type": "text",
+      "required": false
+    },
+    "registration": {
+      "type": "text",
+      "required": false
+    },
+    "location": {
+      "type": "text",
+      "required": false
+    },
+    "active": {
+      "type": "boolean",
+      "required": false
+    },
+    "visit_days": {
+      "type": "integer",
+      "required": false
+    }
+  },
+  "statuses": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "site_id": {
+      "type": "uuid",
+      "required": true
+    },
+    "recorded_on": {
+      "type": "date",
+      "required": true
+    },
+    "hives": {
+      "type": "integer",
+      "required": true
+    },
+    "supers": {
+      "type": "integer",
+      "required": false
+    },
+    "strength": {
+      "type": "text",
+      "required": false
+    },
+    "dead_hives": {
+      "type": "integer",
+      "required": false
+    },
+    "disease": {
+      "type": "text",
+      "required": false
+    },
+    "queen_notes": {
+      "type": "text",
+      "required": false
+    },
+    "notes": {
+      "type": "text",
+      "required": false
+    }
+  },
+  "jobs": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "site_id": {
+      "type": "uuid",
+      "required": true
+    },
+    "name": {
+      "type": "text",
+      "required": true
+    },
+    "due_on": {
+      "type": "date",
+      "required": true
+    },
+    "assigned_to": {
+      "type": "text",
+      "required": false
+    },
+    "completed_on": {
+      "type": "date",
+      "required": false
+    },
+    "labour_minutes": {
+      "type": "integer",
+      "required": false
+    },
+    "cost_cents": {
+      "type": "integer",
+      "required": false
+    },
+    "notes": {
+      "type": "text",
+      "required": false
+    }
+  },
+  "inspections": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "site_id": {
+      "type": "uuid",
+      "required": true
+    },
+    "inspected_on": {
+      "type": "date",
+      "required": true
+    },
+    "inspector": {
+      "type": "text",
+      "required": true
+    },
+    "hives_checked": {
+      "type": "integer",
+      "required": true
+    },
+    "afb": {
+      "type": "text",
+      "required": true
+    },
+    "notified_on": {
+      "type": "date",
+      "required": false
+    },
+    "notification_ref": {
+      "type": "text",
+      "required": false
+    },
+    "action_notes": {
+      "type": "text",
+      "required": false
+    },
+    "notes": {
+      "type": "text",
+      "required": false
+    }
+  },
+  "treatments": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "site_id": {
+      "type": "uuid",
+      "required": true
+    },
+    "applied_on": {
+      "type": "date",
+      "required": true
+    },
+    "product": {
+      "type": "text",
+      "required": true
+    },
+    "batch": {
+      "type": "text",
+      "required": false
+    },
+    "instructions": {
+      "type": "text",
+      "required": false
+    },
+    "removal_due": {
+      "type": "date",
+      "required": false
+    },
+    "removed_on": {
+      "type": "date",
+      "required": false
+    },
+    "harvest_clear_on": {
+      "type": "date",
+      "required": false
+    },
+    "cost_cents": {
+      "type": "integer",
+      "required": false
+    }
+  },
+  "consumables": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "site_id": {
+      "type": "uuid",
+      "required": true
+    },
+    "used_on": {
+      "type": "date",
+      "required": true
+    },
+    "name": {
+      "type": "text",
+      "required": true
+    },
+    "quantity": {
+      "type": "numeric",
+      "required": true
+    },
+    "unit": {
+      "type": "text",
+      "required": true
+    },
+    "cost_cents": {
+      "type": "integer",
+      "required": false
+    }
+  },
+  "harvests": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "site_id": {
+      "type": "uuid",
+      "required": true
+    },
+    "harvested_on": {
+      "type": "date",
+      "required": true
+    },
+    "boxes": {
+      "type": "integer",
+      "required": true
+    },
+    "kg": {
+      "type": "numeric",
+      "required": true
+    },
+    "crop": {
+      "type": "text",
+      "required": true
+    },
+    "declaration_ref": {
+      "type": "text",
+      "required": false
+    },
+    "tutin_option": {
+      "type": "text",
+      "required": false
+    },
+    "evidence_ref": {
+      "type": "text",
+      "required": false
+    },
+    "processor": {
+      "type": "text",
+      "required": false
+    },
+    "notes": {
+      "type": "text",
+      "required": false
+    }
+  },
+  "batches": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "name": {
+      "type": "text",
+      "required": true
+    },
+    "extracted_on": {
+      "type": "date",
+      "required": true
+    },
+    "drum_ref": {
+      "type": "text",
+      "required": false
+    },
+    "notes": {
+      "type": "text",
+      "required": false
+    }
+  },
+  "batch_inputs": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "batch_id": {
+      "type": "uuid",
+      "required": true
+    },
+    "harvest_id": {
+      "type": "uuid",
+      "required": true
+    },
+    "kg": {
+      "type": "numeric",
+      "required": true
+    }
+  },
+  "agreements": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "site_id": {
+      "type": "uuid",
+      "required": true
+    },
+    "name": {
+      "type": "text",
+      "required": true
+    },
+    "starts_on": {
+      "type": "date",
+      "required": true
+    },
+    "ends_on": {
+      "type": "date",
+      "required": true
+    },
+    "terms": {
+      "type": "text",
+      "required": true
+    }
+  },
+  "filings": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "name": {
+      "type": "text",
+      "required": true
+    },
+    "kind": {
+      "type": "text",
+      "required": true
+    },
+    "due_on": {
+      "type": "date",
+      "required": true
+    },
+    "submitted_on": {
+      "type": "date",
+      "required": false
+    },
+    "receipt_ref": {
+      "type": "text",
+      "required": false
+    },
+    "notes": {
+      "type": "text",
+      "required": false
+    }
+  },
+  "notes": {
+    "code": {
+      "type": "text",
+      "required": true
+    },
+    "site_id": {
+      "type": "uuid",
+      "required": true
+    },
+    "recorded_on": {
+      "type": "date",
+      "required": true
+    },
+    "note": {
+      "type": "text",
+      "required": true
+    }
+  }
+}
