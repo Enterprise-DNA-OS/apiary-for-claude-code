@@ -1,0 +1,7 @@
+-- Cite each filing rule accurately. Other due dates are operator reminders.
+create or replace view compliance_findings as
+select 'REG' as rule,code as record,'Apiary registration missing' as finding,'https://afb.org.nz/beekeeping-and-the-law/' as source from sites where active and nullif(registration,'') is null
+union all select 'AFB',code,case when inspected_on+7<current_date then 'AFB notification evidence overdue' else 'AFB notification needs attention now' end,'https://afb.org.nz/beekeeping-and-the-law/' from inspections where afb in ('suspected','confirmed') and (notified_on is null or nullif(notification_ref,'') is null)
+union all select 'FILING',code,case when due_on<current_date then 'Filing evidence overdue' else 'Filing due within 30 days' end,case when kind='COI' then 'https://afb.org.nz/goal-of-the-afb-npmp/certificate-of-inspection/' when kind='ADR' then 'https://afb.org.nz/goal-of-the-afb-npmp/annual-disease-return/' else 'Operator-entered due date; see docs/compliance.md' end from filings where (submitted_on is null or nullif(receipt_ref,'') is null) and due_on<=current_date+30
+union all select 'TRACE',code,'Harvest declaration, site registration or tutin evidence missing','https://www.mpi.govt.nz/agriculture/beekeeping-loss-survey-tutin-contamination-regulations/beekeeper-requirements-honey-exports' from harvest_trace where record_check='Evidence missing'
+union all select 'TREAT',code,attention,'https://www.mpi.govt.nz/dmsdocument/1021/direct' from treatment_watch where attention<>'Review recorded clearance';
